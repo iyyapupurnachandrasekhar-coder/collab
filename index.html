@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drone Agriculture Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --main-bg: #f7fafc;
+      --sidebar-bg: #285430;
+      --primary: #a6cf98;
+      --secondary: #f9f871;
+      --header-bg: #3b7f46;
+      --card-bg: #ffffff;
+      --accent: #243119;
+      --text: #222;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--main-bg);
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      background: var(--sidebar-bg);
+      color: #fff;
+      width: 220px;
+      min-height: 100vh;
+      padding: 20px 0;
+      position: fixed;
+      left: 0;
+      top: 0;
+      transition: transform 0.3s;
+      z-index: 100;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 2em;
+      font-size: 1.4em;
+      letter-spacing: 2px;
+    }
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      padding-left: 30px;
+    }
+    .sidebar a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.04em;
+      padding: 6px 0;
+      transition: color 0.2s;
+    }
+    .sidebar a:hover {
+      color: var(--secondary);
+    }
+    .header {
+      position: fixed;
+      left: 220px;
+      right: 0;
+      top: 0;
+      height: 64px;
+      background: var(--header-bg);
+      padding: 0 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      z-index: 99;
+    }
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2em;
+    }
+    .main {
+      margin-left: 220px;
+      margin-top: 64px;
+      padding: 30px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    .cards {
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(60,60,60,0.03);
+      width: 210px;
+      padding: 18px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+      border-left: 7px solid var(--primary);
+    }
+    .card span {
+      font-size: 2em;
+      font-weight: bold;
+      color: var(--accent);
+    }
+    .card small {
+      color: var(--text);
+      opacity: 0.7;
+    }
+    .section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 8px rgba(60,60,60,0.03);
+    }
+    .section h3 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      color: var(--header-bg);
+    }
+    /* Chart style */
+    #chart {
+      width: 100%;
+      height: 220px;
+      background: #f5fbe9;
+      border-radius: 8px;
+      margin-top: 14px;
+      position: relative;
+    }
+    /* Responsive */
+    @media (max-width: 920px) {
+      .sidebar {
+        transform: translateX(-220px);
+        position: fixed;
+        z-index: 100;
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .header {
+        left: 0;
+      }
+      .main {
+        margin-left: 0;
+      }
+      .menu-btn {
+        display: inline;
+      }
+    }
+    @media (max-width: 620px) {
+      .main {
+        padding: 10px;
+      }
+      .cards {
+        gap: 10px;
+        flex-direction: column;
+      }
+      .card {
+        width: 100%;
+      }
+      .section {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <h2>Agro Drone</h2>
+    <nav>
+      <a href="#">Dashboard</a>
+      <a href="#">Missions</a>
+      <a href="#">Crop Health</a>
+      <a href="#">Reports</a>
+      <a href="#">Settings</a>
+    </nav>
+  </div>
+  <div class="header">
+    <button class="menu-btn" id="menuBtn">&#9776;</button>
+    <span>Drone Agriculture Dashboard</span>
+    <span>👨‍🌾 Admin</span>
+  </div>
+  <main class="main">
+    <div class="cards">
+      <div class="card">
+        <span id="droneCount">8</span>
+        <small>Active Drones</small>
+      </div>
+      <div class="card">
+        <span id="acres">1200</span>
+        <small>Farm Acres Covered</small>
+      </div>
+      <div class="card">
+        <span id="sprays">34</span>
+        <small>Missions Completed</small>
+      </div>
+      <div class="card">
+        <span id="health">89%</span>
+        <small>Avg. Crop Health</small>
+      </div>
+    </div>
+    <div class="section">
+      <h3>Latest Missions</h3>
+      <table style="width:100%;border-collapse:collapse">
+        <tr style="background:var(--main-bg);font-weight:bold">
+          <td>Date</td>
+          <td>Drone ID</td>
+          <td>Mission Type</td>
+          <td>Status</td>
+        </tr>
+        <tr>
+          <td>2025-09-11</td>
+          <td>#DRN102</td>
+          <td>Spray</td>
+          <td style="color:green">Success</td>
+        </tr>
+        <tr>
+          <td>2025-09-10</td>
+          <td>#DRN101</td>
+          <td>Survey</td>
+          <td style="color:orange">Pending</td>
+        </tr>
+        <tr>
+          <td>2025-09-09</td>
+          <td>#DRN104</td>
+          <td>Livestock Check</td>
+          <td style="color:green">Success</td>
+        </tr>
+      </table>
+    </div>
+    <div class="section">
+      <h3>Crop Health Trend</h3>
+      <div id="chart"></div>
+    </div>
+  </main>
+  <script>
+    // Mobile Sidebar toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+
+    // Simple Line Chart using Canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = 580; canvas.height = 220;
+    document.getElementById('chart').appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    // Simulate crop health data
+    const data = [82, 87, 88, 90, 85, 89, 87, 91, 89];
+    // Draw axes
+    ctx.strokeStyle = "#243119";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(50,30);ctx.lineTo(50,180);ctx.lineTo(520,180);ctx.stroke();
+    // Draw trend line
+    ctx.strokeStyle = "#a6cf98";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    data.forEach((v,i)=>{
+      const x=60+i*55, y=180-(v-80)*12;
+      ctx.lineTo(x,y);
+      if(i===0)ctx.moveTo(x,y);
+    });
+    ctx.stroke();
+    // Dots
+    ctx.fillStyle = "#3b7f46";
+    data.forEach((v,i)=>{
+      const x=60+i*55, y=180-(v-80)*12;
+      ctx.beginPath();
+      ctx.arc(x,y,5,0,2*Math.PI);ctx.fill();
+    });
+    // Y axis labels
+    ctx.fillStyle = "#243119";
+    ctx.font = "14px Segoe UI";
+    for(let v=80;v<=100;v+=5) {
+      ctx.fillText(v+"%",15,180-(v-80)*12);
+    }
+    // X axis labels
+    ctx.font = "13px Segoe UI";
+    ["9/1","9/3","9/5","9/7","9/9","9/11","9/13","9/15","9/17"].forEach((date,i)=>{
+      ctx.fillText(date,55+i*55,205);
+    });
+  </script>
+</body>
+</html>
